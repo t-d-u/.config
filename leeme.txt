@@ -1,0 +1,3 @@
+la idea de este repo es backupear todo lo que tenga configs importantes, además de tener siempre una working version de todo. si me encuentro en la posición de restorear las configs por haber formateado por ej no tengo que clonar este remote a mi nuevo .config vacío, dado que es solo un .config; lo que tengo que hacer es:
+-instalar lo necesario según el historial que también estoy backupeando
+-copiar los config files necesarios a mano desde el repo externo hacia las nuevas carpetas que se creen en .config cuando haga las instalaciones (o creando los dirs si no se crean automatic), siguiendo instrucciones particulares como en el caso de st.

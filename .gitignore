@@ -2,8 +2,17 @@
 *
 # Don't ignore directories, so we can recurse into them
 !*/
-#!**./bspwm/
+!**/bspwm/*
+!**/matplotlib/*
+!**/nvim/*
+!**/polybar/*
+!**/st/*
+!**/sxhkd/*
+!**/vifm/*
+!**/zathura/*
+!**/zsh/*
+
 
 # no ignorar archivos
 !.gitignore
-
+!leeme.txt
