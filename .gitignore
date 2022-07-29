@@ -2,13 +2,15 @@
 *
 # Don't ignore directories, so we can recurse into them
 !*/
+
+# le pongo dos asteriscos al final a los que quiero que vean otra carpeta dentro.
 !**/bspwm/*
-!**/matplotlib/*
-!**/nvim/*
+!**/matplotlib/**
+!**/nvim/**
 !**/polybar/*
 !**/st/*
 !**/sxhkd/*
-!**/vifm/*
+!**/vifm/**
 !**/zathura/*
 !**/zsh/*
 
@@ -16,3 +18,8 @@
 # no ignorar archivos
 !.gitignore
 !leeme.txt
+
+# ignorame estos
+vifm/vifminfo.json
+vifm/vifminfo.json_79898
+
