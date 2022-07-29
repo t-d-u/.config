@@ -24,6 +24,7 @@ bspc config gapless_monocle      true
 
 bspc rule -a Matplotlib state=floating
 bspc rule -a Anki desktop='^5'
+bspc rule -a Zathura state=tiled
 
 
 xrandr --output eDP1 --scale 0.8x0.8

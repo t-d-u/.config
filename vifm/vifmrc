@@ -445,7 +445,7 @@ vnoremap w :view<cr>gv
 
 
 " Open file in the background using its default program
-nnoremap gb :file &<cr>l
+"nnoremap gb :file &<cr>l
 
 " Interaction with system clipboard
 if has('win')
@@ -533,7 +533,7 @@ set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,phistory,fhistory,dir
 " carpetas a ignorar
 windo filter /snap\/|Downloads\/|media\/|wiki\/|wiki_test/
 nnoremap f :filter !<cr>
-nnoremap F :windo filter /snap\/|Downloads\/|media\//<cr>
+nnoremap F :windo filter /snap\/|Downloads\/|wiki\/|wiki_test\/|media\//<cr>
 " }}}
 
 " {{{ mappings mios
