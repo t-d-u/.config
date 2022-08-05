@@ -9,8 +9,8 @@ source $ZDOTDIR/.zalias
 export ZSH="$HOME/.oh-my-zsh"
 #para vlc
 export MESA_LOADER_DRIVER_OVERRIDE="i965"
-# para firefox:
-#export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1003/bus
+# para apps de gnome:
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1003/bus
 export MPLCONFIGDIR=$HOME/.config/matplotlib/
 #export external_drive='/media/tdu/Elements/'
 export external_drive='/media/tdu/9C1B-4C75/'

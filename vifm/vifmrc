@@ -96,7 +96,7 @@ endif
 " Set custom status line look
 "%15s significa darle 15% del espacio en status bar al size, %10 es darle eso a date, u:g es tdu:tdu.
 "set statusline="  Hint: %z%= %A %1u:%-1g %8s %10d  "
-set statusline="  Hint: %z%= %A  %8s %10d  "}}}
+set statusline="  Hint: %z%= %A  %8s %10d  "
 
 " ------------------------------------------------------------------------------
 " ni idea que es esto
@@ -164,17 +164,18 @@ command! reload :write | restart
 " program.
 " }}}
 
-" xournalpp/*{{{*/
-filextype *.xopp xournalpp %c}}}
+" xournalpp
+filextype *.xopp xournalpp %c
 
-" Pdf/*{{{*/
- filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
-" filextype *.pdf evince %c
+" Pdf
+"filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
+
+ filextype *.pdf evince %c
 fileviewer *.pdf
         \ vifmimg pdfpreview %px %py %pw %ph %c
         \ %pc
         \ vifmimg clear
-"		\ pdftotext -nopgbrk %c -}}}
+"		\ pdftotext -nopgbrk %c -
 
 "txt y cualquier cosa con nvim
 filextype *.txt nvim %c
@@ -443,6 +444,7 @@ nnoremap S :sort<cr>
 nnoremap w :view<cr>
 vnoremap w :view<cr>gv
 
+"nnoremap cw cw<c-a>
 
 " Open file in the background using its default program
 "nnoremap gb :file &<cr>l
@@ -553,6 +555,6 @@ nmap x :!chmod -x ./* <cr>
 " abrir archivos seleccionados en vim en horizontal split (porque o en normal mode de vifm es algo de gvim que no uso). ademas, notar que si abro archivos seleccionados con <cr> (normalmente) se abre una sola window; los demas buffers los puedo acceder con mi mapeo de vimrc de B.
 nmap o :!nvim -o %f <cr>
 
-" grepear archivos que tengan cierta cosa adentro (me sirve para tags en wiki):
-nmap gg :grep -l
+" grepear archivos que tengan cierta cosa adentro (me sirve para tags en wiki (st=search tag)):
+nmap st :grep -l --exclude-dir=.git
 " }}}

@@ -33,7 +33,7 @@ Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
 Plug 'ncm2/ncm2-path'
 Plug 'ncm2/ncm2-jedi'
-Plug 'ncm2/ncm2-bufword'
+"Plug 'ncm2/ncm2-bufword'
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'jpalardy/vim-slime', { 'for': 'python' }
@@ -41,9 +41,10 @@ Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'hkupty/iron.nvim'
 Plug 'szw/vim-maximizer'
-"Plug 'vimwiki/vimwiki'
-Plug 'lervag/wiki.vim'
+Plug 'vimwiki/vimwiki'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'lervag/wiki.vim'
 call plug#end()
 
 "}}}
@@ -143,8 +144,8 @@ let g:ale_sign_priority=8
 let g:gitgutter_sign_priority=9
 " }}}
 
-" no uso el default substitute así que lo mapeo a easymotion -s{{{
-map f <Plug>(easymotion-s)
+" no uso el default e para end of word así que lo mapeo a easymotion -s{{{
+nmap <leader>s <Plug>(easymotion-s)
 " }}}
 
 " ncm2{{{
@@ -185,10 +186,11 @@ autocmd FileType markdown nmap <buffer> <Leader><CR> :w<CR>
 autocmd FileType markdown nmap <buffer><silent> <Leader>p :call mdip#MarkdownClipboardImage()<CR>
 
 
-aug MD2PDF
-    au!
-    au BufWritePost *.md silent !pandoc % -o %:r.pdf
-aug END
+" comento esto para que se me genere un pdf a partir de un .md solo si hago o de arroba y no simpre que guardo un .md
+"aug MD2PDF
+    "au!
+    "au BufWritePost *.md silent !pandoc % -o %:r.pdf
+"aug END
 "}}}
 
 " python + terminal {{{
@@ -267,7 +269,7 @@ let g:ipython_cell_send_cell_headers = 1
 
 " wiki.vim {{{
 let g:wiki_root = '~/zettelkasten'
-let g:wiki_filetypes = ['md']
+let g:wiki_filetypes = ['md', 'wiki']
 let g:wiki_link_extension = '.md'
 
 
@@ -281,20 +283,24 @@ let g:wiki_tag_list = {'output' : 'echo'}
 " <leader>wb, wg, wG, wd, wr, wsl, wsr, wss
 " mas sin <leader>:
 "tab para ir al siguiente link en normal mode,
+"nmap <c-cr> <plug>(wiki-link-follow)
 "cr para crear y/o seguir link (lo remapeo a split window):
-nmap <cr> <plug>(wiki-link-follow-split)
+"nmap <cr> <plug>(wiki-link-follow-split)
+" al final lo deje comentado; hagamos normal que abrir en split sea <c-w><cr?
 "pero ojo con esto: si en el link abierto en nuevo split apretás backspace terminás teniendo el archivo original abierto en los dos splits. (esto pasa abriéndolo en otro tab tmb).
 nmap \<cr> <plug>(wiki-link-follow-vsplit)
 " reemplazo <c-w>u por t<cr> para abrir link en new tab
 nmap t<cr> <plug>(wiki-link-follow-tab)
 
 " esto lo quiero usar pero me dice que no tengo fzf
-nmap <leader>wz <plug>(wiki-fzf-pages)
+nmap <leader>wfp <plug>(wiki-fzf-pages)
+nmap <leader>wft <plug>(wiki-fzf-tags)
 
 
 
 "let g:wiki_viewer = {'pdf': 'zathura'}
 
+" para pdfs, lo de netrw me lo paso agus{{{
 let g:wiki_file_handler = 'WikiFileHandler'
 function! WikiFileHandler(...) abort dict
   if self.path =~# 'pdf$'
@@ -310,6 +316,16 @@ let g:netrw_browsex_viewer="-"
 function! NFH_pdf(f)
 	execute '!zathura' a:f
 endfunction
+
+
+" situación: quiero tener un zettelkasten del cual estudiar para un parcial de una materia específica, pero no quiero una wiki para esa materia únicamente, dado que haciendo pages de nam voy a querer linkear a pages que estarán ya en mi zet general. el tema es que desde esa page de zet general seguramente linkeo a cosas que ya se van de lo dictado en la materia; yo quiero estudiar solo lo que me estén tomando; meterme solo en links de la materia. entonces quiero, cuando pongo el cursor en un link, que me diga los tags que tiene. así sé si seguir metiéndome o no.
+
+" otra situación: decidí que quiero tener más de un zettelkasten. lo siento pero si estoy leyendo un paper quiero relacionar los temas del paper primero.
+
+
+" }}}
+
+
 
 " }}}
 
