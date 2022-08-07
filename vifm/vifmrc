@@ -170,7 +170,7 @@ filextype *.xopp xournalpp %c
 " Pdf
 "filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
 
- filextype *.pdf evince %c
+ filextype *.pdf sw evince %c
 fileviewer *.pdf
         \ vifmimg pdfpreview %px %py %pw %ph %c
         \ %pc

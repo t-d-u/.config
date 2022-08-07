@@ -41,7 +41,7 @@ Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'hkupty/iron.nvim'
 Plug 'szw/vim-maximizer'
-Plug 'vimwiki/vimwiki'
+"Plug 'vimwiki/vimwiki'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'lervag/wiki.vim'
