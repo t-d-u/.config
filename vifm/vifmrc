@@ -558,3 +558,5 @@ nmap o :!nvim -o %f <cr>
 " grepear archivos que tengan cierta cosa adentro (me sirve para tags en wiki (st=search tag)):
 nmap st :grep -l --exclude-dir=.git
 " }}}
+
+nmap V :!nvim <cr>

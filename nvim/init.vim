@@ -26,7 +26,7 @@ Plug 'sirver/ultisnips' " better snippets (suscribe Tab)
 Plug 'lilydjwg/colorizer' " colors on files
 Plug 'lervag/vimtex' "vimtex
 Plug 'aserebryakov/vim-todo-lists'
-Plug 'dhruvasagar/vim-table-mode' " hay tabla
+Plug 'dhruvasagar/vim-table-mode'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'ncm2/ncm2'
@@ -45,6 +45,7 @@ Plug 'szw/vim-maximizer'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'lervag/wiki.vim'
+Plug 'tmhedberg/SimplyFold'
 call plug#end()
 
 "}}}
@@ -250,7 +251,9 @@ nmap <Leader><Leader>r :IPythonCellRun<CR><CR>
 
 nmap <Leader>r :IPythonCellExecuteCell<CR><CR>
 
-let g:ipython_cell_tag = ['{{{','}}}']
+"let g:ipython_cell_tag = ['{{{','}}}']
+"let g:ipython_cell_tag = ['# %%']
+let g:ipython_cell_tag = ['##']
 let g:ipython_cell_send_cell_headers = 1
 " }}}
 
@@ -296,7 +299,7 @@ nmap t<cr> <plug>(wiki-link-follow-tab)
 nmap <leader>wfp <plug>(wiki-fzf-pages)
 nmap <leader>wft <plug>(wiki-fzf-tags)
 
-
+nmap tt <c-w><cr> <c-w>1_
 
 "let g:wiki_viewer = {'pdf': 'zathura'}
 
@@ -326,8 +329,46 @@ endfunction
 " }}}
 
 
+let g:wiki_fzf_pages_opts = '--preview "cat {1}"'
 
 " }}}
 
 "luafile $HOME/.config/nvim/lua/plugins.lua
 
+" Vimtex{{{
+" let g:vimtex_compiler_latexmk_engines = {'pdflatex': '-pdf'}
+let g:vimtex_compiler_latexmk_engines = {'latexmk': '-pdf'}
+let g:tex_flavor = "latex"
+let g:vimtex_view_method='zathura'
+let g:vimtex_quickfix_mode=1
+
+" Visible code only when hover
+set conceallevel=1
+let g:tex_conceal='abdmg'
+hi clear Conceal
+
+
+augroup vimtex_config
+    au!
+    au User VimtexEventQuit call vimtex#compiler#clean(0)
+augroup END
+" autocmd FileType tex nmap <buffer> <Leader><CR> :w<CR>
+" autocmd FileType tex nmap <buffer> <Leader><Leader><CR> :update<bar>:VimtexCompile<CR>
+"}}}
+
+" simplyfold {{{
+" tengo todo default. la idea es usar esto para foldear python, definir las cells con ## (osea si yo quiero definir una cell no voy al mismo tiempo a foldearla, sino que el fold es automatico)
+" }}}
+
+" todo {{{
+
+" a cont copy paste del readme, reemplazando la s por la coma: toggleo con la coma. ademas, con <leader>, toggleo que al abrir nueva linea sea algo para todo en vez de un renglon normal.
+let g:VimTodoListsCustomKeyMapper = 'VimTodoListsCustomMappings'
+
+function! VimTodoListsCustomMappings()
+  nnoremap <buffer> , :VimTodoListsToggleItem<CR>
+  "nnoremap <buffer> <Space> :VimTodoListsToggleItem<CR>
+  noremap <buffer> <leader>, :silent call VimTodoListsSetItemMode()<CR>
+endfunction
+
+" }}}
