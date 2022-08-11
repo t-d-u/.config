@@ -8,7 +8,7 @@
 !**/matplotlib/**
 !**/nvim/**
 !**/polybar/*
-!**/st/**
+# !/st/* ni idea
 !**/sxhkd/*
 !**/vifm/**
 !**/zathura/*
