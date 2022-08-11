@@ -16,6 +16,7 @@ export MPLCONFIGDIR=$HOME/.config/matplotlib/
 export external_drive='/media/tdu/9C1B-4C75/'
 export usbandroid="/run/user/1000/gvfs/mtp:host=Xiaomi_TRINKET-IDP__SN%3A95D39118_1015d472"
 export science=$HOME/pdfs/academic_biblio/science/
+export maths=$HOME/zettelkasten/latex_formulas/
 
 
 export xournal_autosave="$HOME/tdu/snap/xournalpp/69/.config/xournalpp/autosave/"

@@ -353,7 +353,9 @@ augroup vimtex_config
     au User VimtexEventQuit call vimtex#compiler#clean(0)
 augroup END
 " autocmd FileType tex nmap <buffer> <Leader><CR> :w<CR>
-" autocmd FileType tex nmap <buffer> <Leader><Leader><CR> :update<bar>:VimtexCompile<CR>
+autocmd FileType tex nmap <buffer> <Leader><Leader><CR> :update<bar>:VimtexCompile<CR>
+
+
 "}}}
 
 " simplyfold {{{
@@ -372,3 +374,7 @@ function! VimTodoListsCustomMappings()
 endfunction
 
 " }}}
+
+" vim-markdown para latex
+
+let g:vim_markdown_math = 1

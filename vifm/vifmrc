@@ -168,9 +168,10 @@ command! reload :write | restart
 filextype *.xopp xournalpp %c
 
 " Pdf
-"filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
+filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
 
- filextype *.pdf sw evince %c
+" filextype *.pdf sw evince %c
+nnoremap e :!sw evince %c<cr>
 fileviewer *.pdf
         \ vifmimg pdfpreview %px %py %pw %ph %c
         \ %pc
@@ -536,6 +537,11 @@ set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,phistory,fhistory,dir
 windo filter /snap\/|Downloads\/|media\/|wiki\/|wiki_test/
 nnoremap f :filter !<cr>
 nnoremap F :windo filter /snap\/|Downloads\/|wiki\/|wiki_test\/|media\//<cr>
+
+
+" para esconder el .synctex.gz generado al compilar un .tex
+filter {*.synctex.gz}
+
 " }}}
 
 " {{{ mappings mios
