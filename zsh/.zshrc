@@ -17,6 +17,7 @@ export external_drive='/media/tdu/9C1B-4C75/'
 export usbandroid="/run/user/1000/gvfs/mtp:host=Xiaomi_TRINKET-IDP__SN%3A95D39118_1015d472"
 export science=$HOME/pdfs/academic_biblio/science/
 export maths=$HOME/zettelkasten/latex_formulas/
+export dnl=$HOME/FCEyN/2020-21/dnl/
 
 
 export xournal_autosave="$HOME/tdu/snap/xournalpp/69/.config/xournalpp/autosave/"
@@ -27,6 +28,7 @@ export xournal_autosave="$HOME/tdu/snap/xournalpp/69/.config/xournalpp/autosave/
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="lambda"
+#ZSH_THEME='kiwi'
 
 
 # Set list of themes to pick from when loading at random
@@ -92,6 +94,7 @@ ZSH_THEME="lambda"
 plugins=(git zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
+setopt auto_cd
 
 # User configuration
 

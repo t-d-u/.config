@@ -185,7 +185,7 @@ filextype *.py nvim %c
 filextype *.json nvim %c
 filextype *.vim nvim %c
 filextype *.lua nvim %c
-filextype .* nvim %c
+filextype *.wiki nvim %c
 " para abrir con nvim, sudo nvim, y sudo whatever
 nnoremap <CR> :!nvim %f<cr>
 nnoremap s<CR> :!sudo nvim %f<cr>
@@ -534,13 +534,13 @@ set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,phistory,fhistory,dir
 
 
 " carpetas a ignorar
-windo filter /snap\/|Downloads\/|media\/|wiki\/|wiki_test/
+windo filter /snap\/|Downloads\/|media\/|wiki\/|wiki_test
 nnoremap f :filter !<cr>
 nnoremap F :windo filter /snap\/|Downloads\/|wiki\/|wiki_test\/|media\//<cr>
 
 
 " para esconder el .synctex.gz generado al compilar un .tex
-filter {*.synctex.gz}
+"filter {*.synctex.gz}
 
 " }}}
 
@@ -566,3 +566,4 @@ nmap st :grep -l --exclude-dir=.git
 " }}}
 
 nmap V :!nvim <cr>
+

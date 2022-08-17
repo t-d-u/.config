@@ -32,20 +32,22 @@ Plug 'airblade/vim-gitgutter'
 Plug 'ncm2/ncm2'
 Plug 'roxma/nvim-yarp'
 Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-jedi'
-"Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-jedi' " para python
+"Plug 'ncm2/ncm2-bufword' " la verdad es que no lo uso
 Plug 'dense-analysis/ale'
 Plug 'easymotion/vim-easymotion'
 Plug 'jpalardy/vim-slime', { 'for': 'python' }
 Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-Plug 'hkupty/iron.nvim'
+"Plug 'hkupty/iron.nvim'
 Plug 'szw/vim-maximizer'
 "Plug 'vimwiki/vimwiki'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'lervag/wiki.vim'
+Plug 'lervag/wiki-ft.vim'
 Plug 'tmhedberg/SimplyFold'
+Plug 'dyng/ctrlsf.vim' " para usar con ripgrep en wiki.vim
 call plug#end()
 
 "}}}
@@ -76,7 +78,8 @@ call plug#end()
 	set clipboard+=unnamedplus
 	se go=a
 	set foldmethod=marker
-	set shell=/bin/zsh
+	set shell=/usr/bin/zsh
+	"set shell=/usr/bin/bash
 
 " }}}
 
@@ -110,11 +113,14 @@ autocmd BufWritePost *Xresources,*Xdefaults !xrdb %
 
 "  general mappings{{{
 nnoremap <s-tab> gt
-nmap B :bnext<cr>
-nmap <leader>b :buffer
+nmap <leader>n :bnext<cr>
+nmap <leader>b :bprevious<cr>
 
 
-nmap <leader>z Vy:!zathura <C-R>"<cr><cr>
+nmap <leader>z Vy:!zathura <C-R>"<CR><CR>
+nmap fw :CtrlSF
+" para yankear el filepath del file en el current buffer
+noremap <silent> yf :let @+=expand("%")<CR>
 " }}}
 
 "ultisnips{{{
@@ -152,7 +158,11 @@ nmap <leader>s <Plug>(easymotion-s)
 " ncm2{{{
 autocmd BufEnter * call ncm2#enable_for_buffer()      " enable ncm2 for all buffers
 set completeopt=noinsert,menuone,noselect             " IMPORTANT: :help Ncm2PopupOpen for more information
-let g:python3_host_prog='/usr/bin/python3'            " ncm2-jedi}}}
+let g:python3_host_prog='/usr/bin/python3'            " ncm2-jedi
+
+" para no tener que escribir 3 caracteres antes de que aparezca el autocomplete. esto a su vez renders useless la utilizacion de wiki.vim del omnicomplete.
+let g:ncm2#complete_length=[[1,1],[7,2]]
+" }}}
 
 " navegación y resizing windows y terminal{{{
 "la i es para llegar a la terminal y estar en insert mode
@@ -184,7 +194,7 @@ autocmd FileType csv nmap <buffer> <Leader><Leader> :Tabularize /,<CR>
 "markdown {{{
 autocmd FileType markdown nmap <buffer> <Leader><Leader><CR> :! pandoc % -o %:r.pdf; zathura --fork %:r.pdf<CR><CR>
 autocmd FileType markdown nmap <buffer> <Leader><CR> :w<CR>
-autocmd FileType markdown nmap <buffer><silent> <Leader>p :call mdip#MarkdownClipboardImage()<CR>
+autocmd FileType markdown,wiki nmap <buffer><silent> <Leader>p :call mdip#MarkdownClipboardImage()<CR>
 
 
 " comento esto para que se me genere un pdf a partir de un .md solo si hago o de arroba y no simpre que guardo un .md
@@ -271,26 +281,17 @@ let g:ipython_cell_send_cell_headers = 1
 "}}}
 
 " wiki.vim {{{
-let g:wiki_root = '~/zettelkasten'
-let g:wiki_filetypes = ['md', 'wiki']
-let g:wiki_link_extension = '.md'
+"let g:wiki_root = '~/zettelkasten'
+" si no agrego md no puedo abrir fotos en .md apretando enter
+let g:wiki_filetypes = ['wiki', 'md']
+let g:wiki_link_extension = '.wiki'
 
 
-let g:wiki_link_target_type = 'md'
+let g:wiki_link_target_type = 'wiki'
 
-" ver WikiTagList para las opciones; el default era loclist que te deja el titulo de la nota en la que estas, pero echo te da las notas taggeadas mas ordenadas.
 " esto es con <leader>wsl
 let g:wiki_tag_list = {'output' : 'echo'}
 
-" reminder de los mappings que quiero usar:
-" <leader>wb, wg, wG, wd, wr, wsl, wsr, wss
-" mas sin <leader>:
-"tab para ir al siguiente link en normal mode,
-"nmap <c-cr> <plug>(wiki-link-follow)
-"cr para crear y/o seguir link (lo remapeo a split window):
-"nmap <cr> <plug>(wiki-link-follow-split)
-" al final lo deje comentado; hagamos normal que abrir en split sea <c-w><cr?
-"pero ojo con esto: si en el link abierto en nuevo split apretás backspace terminás teniendo el archivo original abierto en los dos splits. (esto pasa abriéndolo en otro tab tmb).
 nmap \<cr> <plug>(wiki-link-follow-vsplit)
 " reemplazo <c-w>u por t<cr> para abrir link en new tab
 nmap t<cr> <plug>(wiki-link-follow-tab)
@@ -301,7 +302,7 @@ nmap <leader>wft <plug>(wiki-fzf-tags)
 
 nmap tt <c-w><cr> <c-w>1_
 
-"let g:wiki_viewer = {'pdf': 'zathura'}
+let g:wiki_viewer = {'pdf': 'zathura'}
 
 " para pdfs, lo de netrw me lo paso agus{{{
 let g:wiki_file_handler = 'WikiFileHandler'
@@ -376,5 +377,30 @@ endfunction
 " }}}
 
 " vim-markdown para latex
-
+" lo de tex no se paque sirve
+let g:tex_conceal = ""
 let g:vim_markdown_math = 1
+
+"algo que le gusta a lervag
+let g:vim_markdown_conceal = 2
+
+
+
+"au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
+"au User Ncm2PopupClose set completeopt=menuone
+
+"augroup my_cm_setup
+"autocmd!
+"autocmd BufEnter * call ncm2#enable_for_buffer()
+"autocmd User WikiBufferInitialized call ncm2#register_source({
+		"\ 'name': 'wiki',
+		"\ 'priority': 9,
+		"\ 'scope': ['wiki'],
+		"\ 'word_pattern': '\w+',
+		"\ 'complete_pattern': '\[\[',
+		"\ 'on_complete': ['ncm2#on_complete#delay', 200,
+		"\                 'ncm2#on_complete#omni',
+		"\                 'wiki#complete#omnicomplete'],
+		"\})
+"augroup END
+
