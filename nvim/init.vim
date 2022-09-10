@@ -62,7 +62,7 @@ call plug#end()
 	syntax on
 	set encoding=utf-8
 	set number relativenumber
-	set foldlevel=99
+	set foldlevel=0
 	"set nohlsearch
 	set path +=**
 	set mouse=a
@@ -109,6 +109,8 @@ call plug#end()
 
 "cada vez que guardo con vim se actualiza el soruceo de X
 autocmd BufWritePost *Xresources,*Xdefaults !xrdb %
+
+
 "}}}
 
 "  general mappings{{{
@@ -117,11 +119,40 @@ nmap <leader>n :bnext<cr>
 nmap <leader>b :bprevious<cr>
 
 
-nmap <leader>z Vy:!zathura <C-R>"<CR><CR>
-nmap fw :CtrlSF
-" para yankear el filepath del file en el current buffer
-noremap <silent> yf :let @+=expand("%")<CR>
+"nmap <leader>z Vy:!zathura <C-R>"<CR><CR>
+"nmap <leader>z f<space> y$:!zathura <C-R>"<CR><CR>
+"nmap <leader>z 0f<space> y$:!evince <C-R>"<CR><CR>
+"nmap <leader>z 0f$h y$:!evince <C-R>"<CR><CR>
+" para el formato: blablabla [[$lib/ro.pdf|descripcion]] blablabla desde cualq lugar del renglón.
+"nmap <leader>z f$ yt|:!evince <C-R>"<CR><CR>
+nmap <leader>z f]F$yt\|:!evince <C-R>"<CR><CR>
+
+
+nmap <leader>fs :CtrlSF<space>
+" para yankear el filepath del file en el current buffer. usar :r es para tener solo el root. hice lo mismo con vifm; lo saque de ahi en realidad. es algo que agregue a lo que encontre aca: https://stackoverflow.com/questions/916875/yank-file-name-path-of-current-buffer-in-vim
+noremap <silent> yf :let @+=expand("%:r")<CR>
+
+inoremap <S-Tab> search('\%#[]>)}]', 'n') ? '<Right>' : '<Tab>'
+
+autocmd FileType wiki imap <S-tab> <esc>Ea<space>
+autocmd FileType wiki vmap <leader>¿ di¿<tab><esc>p3<right>
+
+
+"delete las llaves en {{esto}}
+"nmap dl f}xxF{hxx
+
+"nmap <F3> i<C-R>=strftime("%Y%m%d")<CR><Esc>
+
+
+nnoremap <silent> "" :registers "0123456789abcdefghijklmnopqrstuvwxyz*+.<CR>
+
 " }}}
+
+" CtrlSF usado con wiki.vim xa buscar texto dentro de file {{{
+function! g:CtrlSFAfterMainWindowInit()
+    setl wrap
+endfunction
+""}}}
 
 "ultisnips{{{
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -167,9 +198,15 @@ let g:ncm2#complete_length=[[1,1],[7,2]]
 " navegación y resizing windows y terminal{{{
 "la i es para llegar a la terminal y estar en insert mode
 nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>ji
+"el normal: ir para el split de abajo y automaticamente ponerlo en tamano normal en vez de minimizado
+nnoremap <C-j> <C-w>j <c-w>=
+"para python:
+autocmd FIleType py nnoremap <C-j> <C-j>i
+
 nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>li
+
+nnoremap <C-l> <C-w>l <c-w>=
+autocmd FIleType py nnoremap <C-l> <C-w>li
 tmap <C-h> <esc><C-h>
 inoremap <C-j> <esc><C-j>
 tmap <C-k> <esc><C-k>
@@ -181,6 +218,7 @@ tmap <C-k> <esc><C-k>
 " Change 2 split windows from vert to horiz or horiz to vert
 map <Leader>h <C-w>t<C-w>H
 map <Leader>k <C-w>t<C-w>K
+
 
 " }}}
 
@@ -257,7 +295,7 @@ xmap <Leader>s <Plug>SlimeRegionSend<CR>
 
 " cell {{{
 "el segundo CR es para hacer enter luego de que me pregunte por el job id
-nmap <Leader><Leader>r :IPythonCellRun<CR><CR>
+nmap <Leader><Leader>r <esc><C-k> :IPythonCellRun<CR><CR>
 
 nmap <Leader>r :IPythonCellExecuteCell<CR><CR>
 
@@ -281,7 +319,7 @@ let g:ipython_cell_send_cell_headers = 1
 "}}}
 
 " wiki.vim {{{
-"let g:wiki_root = '~/zettelkasten'
+let g:wiki_root = '~/zettelkasten' "esto no sirve de nada
 " si no agrego md no puedo abrir fotos en .md apretando enter
 let g:wiki_filetypes = ['wiki', 'md']
 let g:wiki_link_extension = '.wiki'
@@ -296,6 +334,11 @@ nmap \<cr> <plug>(wiki-link-follow-vsplit)
 " reemplazo <c-w>u por t<cr> para abrir link en new tab
 nmap t<cr> <plug>(wiki-link-follow-tab)
 
+"abrir una page (o file cualquiera) que esta linkeada en una nota cuyo buffer se esta viendo en una ventana A, en una ventana B: B es la ultima ventana que fue usada. fs es por file split. osea apretar enter te abre el link en la misma window, fs te la abre en la otra window
+nnoremap <silent> fs :let mycurf=expand("<cfile>")<cr><c-w>p:execute("e ".mycurf)<cr>
+nmap <leader>a :above split<cr><c-j>
+
+
 " esto lo quiero usar pero me dice que no tengo fzf
 nmap <leader>wfp <plug>(wiki-fzf-pages)
 nmap <leader>wft <plug>(wiki-fzf-tags)
@@ -303,6 +346,46 @@ nmap <leader>wft <plug>(wiki-fzf-tags)
 nmap tt <c-w><cr> <c-w>1_
 
 let g:wiki_viewer = {'pdf': 'zathura'}
+
+" para abrir un split con el index
+autocmd FileType wiki nmap <leader>wsw :split<cr><leader>ww
+
+
+" esto es una lista de diccionarios; cada diccionario tiene info de un template: "todos tienen que tener a matcher and a source". el único que tengo es template.wiki. el criterio que tiene que tener un filename para que se le aplique el template es no tener un whitespace. osea... todos.
+"let g:wiki_templates = [
+	  "\ { 'match_re': '\S',
+	  "\   'source_filename': '/home/tdu/zettelkasten/template.wiki'}
+	  "\]
+" lo comento xq no lo uso y xq no sé cómo hacer para que funcione solo con archivos .wiki; ahora hago cualquier .md anywhere y me pone el template.
+
+
+let g:wiki_map_create_page = 'MyFunction'
+
+function MyFunction(name) abort
+  let l:name = wiki#get_root() . '/' . a:name
+
+  " If the file is new, then append the current date
+  return filereadable(l:name)
+        \ ? a:name
+        "\ : a:name . '_' . strftime('%Y%m%d%H%M%S')
+        \ : strftime('%Y%m%d%H%M%S') . '_' . a:name
+endfunction
+
+
+
+" esto viene de una modicicación a este comment de god himself: https://github.com/lervag/wiki.vim/issues/240#issuecomment-1195354202
+let g:wiki_map_text_to_link = 'MyTextToLink'
+
+function MyTextToLink(text) abort
+  return [strftime('%Y%m%d%H%M%S') . '_' . a:text, a:text]
+endfunction
+
+
+
+"recordar que tengo un unltisnips
+
+
+" dado que cuando tomo apuntes tengo el index de la materia cuyos apuntes estoy tomando en un split, y quiero ir listando las pages que voy creando (mas que nada porque es dificil ir linkeandolas en el momento, y esta bueno tener la secuencia de como se fueron creando), uso el mapping de yf que tengo en general mappings para yankear el rootname, y en vez de pegar, voy a pegar y hacer enter en el index. no tengo un mapping, es p enter, pero me estoy recordando.
 
 " para pdfs, lo de netrw me lo paso agus{{{
 let g:wiki_file_handler = 'WikiFileHandler'
@@ -363,9 +446,9 @@ autocmd FileType tex nmap <buffer> <Leader><Leader><CR> :update<bar>:VimtexCompi
 " tengo todo default. la idea es usar esto para foldear python, definir las cells con ## (osea si yo quiero definir una cell no voy al mismo tiempo a foldearla, sino que el fold es automatico)
 " }}}
 
-" todo {{{
+" todo lists {{{
 
-" a cont copy paste del readme, reemplazando la s por la coma: toggleo con la coma. ademas, con <leader>, toggleo que al abrir nueva linea sea algo para todo en vez de un renglon normal.
+" a cont copy paste del readme, reemplazando la s por la coma: toggleo con la coma. ademas, con <leader>, toggleo que al abrir nueva linea sea algo para TODO en vez de un renglon normal.
 let g:VimTodoListsCustomKeyMapper = 'VimTodoListsCustomMappings'
 
 function! VimTodoListsCustomMappings()
@@ -386,21 +469,20 @@ let g:vim_markdown_conceal = 2
 
 
 
-"au User Ncm2PopupOpen set completeopt=noinsert,menuone,noselect
-"au User Ncm2PopupClose set completeopt=menuone
 
-"augroup my_cm_setup
-"autocmd!
-"autocmd BufEnter * call ncm2#enable_for_buffer()
-"autocmd User WikiBufferInitialized call ncm2#register_source({
-		"\ 'name': 'wiki',
-		"\ 'priority': 9,
-		"\ 'scope': ['wiki'],
-		"\ 'word_pattern': '\w+',
-		"\ 'complete_pattern': '\[\[',
-		"\ 'on_complete': ['ncm2#on_complete#delay', 200,
-		"\                 'ncm2#on_complete#omni',
-		"\                 'wiki#complete#omnicomplete'],
-		"\})
-"augroup END
+"esto es copiado de wiki.vim. es para usar omnicomplete de links luego de [[. lo que tiene es que te hace omnicomplete desde el working dir hacia abajo, pero no viceversa hasta el index.wiki. entonces la unica ventjaa que tiene respecto de ncm2-path es lo primero que hace, dado que ncm2 solo se fija en el wd.
+augroup my_cm_setup
+autocmd!
+autocmd BufEnter * call ncm2#enable_for_buffer()
+autocmd User WikiBufferInitialized call ncm2#register_source({
+		\ 'name': 'wiki',
+		\ 'priority': 9,
+		\ 'scope': ['wiki'],
+		\ 'word_pattern': '\w+',
+		\ 'complete_pattern': '\[\[',
+		\ 'on_complete': ['ncm2#on_complete#delay', 200,
+		\                 'ncm2#on_complete#omni',
+		\                 'wiki#complete#omnicomplete'],
+		\})
+augroup END
 

@@ -56,3 +56,5 @@ map F follow
 
 set scroll-full-overlap 0.05
 set adjust-open width
+
+set incremental-search false

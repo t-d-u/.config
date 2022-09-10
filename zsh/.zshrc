@@ -15,12 +15,24 @@ export MPLCONFIGDIR=$HOME/.config/matplotlib/
 #export external_drive='/media/tdu/Elements/'
 export external_drive='/media/tdu/9C1B-4C75/'
 export usbandroid="/run/user/1000/gvfs/mtp:host=Xiaomi_TRINKET-IDP__SN%3A95D39118_1015d472"
-export science=$HOME/pdfs/academic_biblio/science/
+export biblio=$HOME/pdfs/science/biblio/
+export papers=$HOME/pdfs/science/papers/
 export maths=$HOME/zettelkasten/latex_formulas/
 export dnl=$HOME/FCEyN/2020-21/dnl/
+export z=$HOME/zettelkasten/
+export nfi=$HOME/FCEyN/2022-2/nfi/
+export nam=$HOME/FCEyN/2022-2/nam/biblio/
 
 
 export xournal_autosave="$HOME/tdu/snap/xournalpp/69/.config/xournalpp/autosave/"
+
+# esto lo dejo xq etsá bueno saberlo pero no me sirve
+autoload -U add-zsh-hook
+export CURRDATE
+currdate() {
+	CURRDATE=$(date "+%d-%m-%Y")
+}
+add-zsh-hook preexec currdate
 #export EDITOR='nvim'
 #export VISUAL='nvim'
 # Set name of the theme to load --- if set to "random", it will

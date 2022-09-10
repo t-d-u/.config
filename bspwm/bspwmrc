@@ -25,12 +25,15 @@ bspc config gapless_monocle      true
 bspc rule -a Matplotlib state=floating
 bspc rule -a Anki desktop='^5'
 bspc rule -a Zathura state=tiled
+bspc rule -a spotify desktop='^9'
 
 
 xrandr --output eDP1 --scale 0.8x0.8
 xrandr --output DP1 --scale 1x1.20
 
 
+xset r rate 175 50 # reducir delay de teclas
+setxkbmap -option caps:swapescape
 
 
 

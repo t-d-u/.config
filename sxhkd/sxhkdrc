@@ -149,13 +149,7 @@ super + ctrl + shift + space
 # move/resize
 #
 
-# resize gaps
-# adjust gap size
-super + {x,z}
-	bspc config window_gap $(($(bspc config window_gap) {+1,-1}))
 
-super + shift + {z,x}
-	bspc config window_gap 12
 
 # expand a window by moving one of its side outward
 super + alt + {h,j,k,l}
@@ -176,3 +170,19 @@ super + alt + s
 # horizontal split
 super + v
 	bspc node @parent -R 90
+
+
+super + space
+	st -e vifm
+
+
+super + shift + {z,x}
+	bspc config window_gap 12
+
+
+# resize gaps
+# adjust gap size
+super + {x,z}
+	bspc config window_gap $(($(bspc config window_gap) {+1,-1}))
+
+

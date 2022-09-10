@@ -168,9 +168,9 @@ command! reload :write | restart
 filextype *.xopp xournalpp %c
 
 " Pdf
-filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
+" filextype *.pdf zathura %c %i &, apvlv %c, xpdf %c
 
-" filextype *.pdf sw evince %c
+ filextype *.pdf sw evince %c
 nnoremap e :!sw evince %c<cr>
 fileviewer *.pdf
         \ vifmimg pdfpreview %px %py %pw %ph %c
@@ -192,18 +192,15 @@ nnoremap s<CR> :!sudo nvim %f<cr>
 nnoremap sl :!sudo %f<cr>
 
 " Audio
-filetype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
+filetype *.wav,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
 "      \ {Play using ffplay}
 "      \ ffplay -nodisp -autoexit %c,
        \ {Play using MPlayer}
-       \ mplayer %f,
 	   \ {Play using vlc}
-	   \ !sw vlc %f,
-fileviewer *.mp3 mp3info
-fileviewer *.flac soxi
+	   \ sw vlc %f,
 
 " Video
-filextype *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
+filextype *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,*.mp3
          \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
          \*.as[fx]
 "       \ {View using ffplay}
@@ -215,7 +212,7 @@ filextype *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
 		\ {view using vlc}
 		\ sw vlc %f,
 
-fileviewer *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
+fileviewer *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,*.mp3
           \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
           \*.as[fx]
         \ vifmimg videopreview %px %py %pw %ph %c
@@ -239,7 +236,7 @@ fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm
 		\ vifmimg clear
 
 " Office files
-filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx libreoffice %f &
+filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx zaread %f &
 fileviewer *.doc catdoc %c
 fileviewer *.docx docx2txt.pl %f -
 
@@ -567,3 +564,6 @@ nmap st :grep -l --exclude-dir=.git
 
 nmap V :!nvim <cr>
 
+nmap A :!nvim %c:r.md<cr>
+
+nmap I :!nvim index.wiki<cr>
