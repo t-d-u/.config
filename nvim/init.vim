@@ -21,7 +21,7 @@ Plug 'tmhedberg/SimpylFold' " foldea python bien
 Plug 'scrooloose/nerdcommenter' " plugin para comentar
 Plug 'Raimondi/delimitMate' " auto-paréntesis
 "Plug 'godlygeek/tabular' " plugin para pandoc y csv no lo uso nunca
-"Plug 'tpope/vim-surround' " surround no lo uso nunca
+Plug 'tpope/vim-surround' " surround no lo uso nunca
 Plug 'sirver/ultisnips' " better snippets (suscribe Tab)
 Plug 'lilydjwg/colorizer' " colors on files
 Plug 'lervag/vimtex' "vimtex
@@ -48,6 +48,8 @@ Plug 'lervag/wiki.vim'
 Plug 'lervag/wiki-ft.vim'
 Plug 'tmhedberg/SimplyFold'
 Plug 'dyng/ctrlsf.vim' " para usar con ripgrep en wiki.vim
+Plug 'jbyuki/venn.nvim'
+Plug 'rbgrouleff/bclose.vim'
 call plug#end()
 
 "}}}
@@ -77,7 +79,6 @@ call plug#end()
 	set cursorline
 	set clipboard+=unnamedplus
 	se go=a
-	set foldmethod=marker
 	set shell=/usr/bin/zsh
 	"set shell=/usr/bin/bash
 
@@ -115,40 +116,49 @@ autocmd BufWritePost *Xresources,*Xdefaults !xrdb %
 
 "  general mappings{{{
 nnoremap <s-tab> gt
-nmap <leader>n :bnext<cr>
-nmap <leader>b :bprevious<cr>
+nmap ,l :bnext<cr>
+nmap ,h :bprevious<cr>
+nmap ,b :ls<CR>:b<Space>
+" del plugin bclose.vim
+nmap ,d <leader>bd
 
+nmap <leader>z f]F$yt\|:!okular <C-R>"<CR><CR>
 
-"nmap <leader>z Vy:!zathura <C-R>"<CR><CR>
-"nmap <leader>z f<space> y$:!zathura <C-R>"<CR><CR>
-"nmap <leader>z 0f<space> y$:!evince <C-R>"<CR><CR>
-"nmap <leader>z 0f$h y$:!evince <C-R>"<CR><CR>
-" para el formato: blablabla [[$lib/ro.pdf|descripcion]] blablabla desde cualq lugar del renglón.
-"nmap <leader>z f$ yt|:!evince <C-R>"<CR><CR>
-nmap <leader>z f]F$yt\|:!evince <C-R>"<CR><CR>
-
-
-nmap <leader>fs :CtrlSF<space>
 " para yankear el filepath del file en el current buffer. usar :r es para tener solo el root. hice lo mismo con vifm; lo saque de ahi en realidad. es algo que agregue a lo que encontre aca: https://stackoverflow.com/questions/916875/yank-file-name-path-of-current-buffer-in-vim
-noremap <silent> yf :let @+=expand("%:r")<CR>
+
+"noremap <silent> yf :let @+=expand("%:r")<CR>
+"noremap <silent> yf :let @+=expand("%:t")<CR>
+" @f yankea al register f
 
 inoremap <S-Tab> search('\%#[]>)}]', 'n') ? '<Right>' : '<Tab>'
 
 autocmd FileType wiki imap <S-tab> <esc>Ea<space>
 autocmd FileType wiki vmap <leader>¿ di¿<tab><esc>p3<right>
 
-
-"delete las llaves en {{esto}}
-"nmap dl f}xxF{hxx
-
-"nmap <F3> i<C-R>=strftime("%Y%m%d")<CR><Esc>
-
-
 nnoremap <silent> "" :registers "0123456789abcdefghijklmnopqrstuvwxyz*+.<CR>
 
+noremap <silent> yF :let @f=expand("%:t")<CR>
+" para yankear un link al register l. la idea es tener el cursor en una sección que quiero linkear. ponele que estoy en una ###seccion3; quiero #seccion1#2#seccion3. xa eso voy a la table of contents, busco el link y vuelvo.
+"nmap yl 2F["ly$
+nmap yl T["lyt]
+
+"como buscar el link estando parado sobre la linea con el titulo del subheader.
+nmap yh $F#y$gg/<C-R>"<CR>
+
+"osea la idea es usar yh, luego yl, luego volver al lugar donde quería pegar el link
+
+
+autocmd FileType wiki vmap b :VBox<cr>
+
+autocmd FileType wiki nmap Bb :set ve=all<cr>
+
+nnoremap <silent> <leader>o :<C-u>call append(line("."),   repeat([""], v:count1))<CR>
 " }}}
 
 " CtrlSF usado con wiki.vim xa buscar texto dentro de file {{{
+"nmap <leader>fs :CtrlSF<space>
+nmap <leader>fs <Plug>CtrlSFPrompt
+nmap <leader>fS :CtrlSFToggle<CR>
 function! g:CtrlSFAfterMainWindowInit()
     setl wrap
 endfunction
@@ -345,11 +355,12 @@ nmap <leader>wft <plug>(wiki-fzf-tags)
 
 nmap tt <c-w><cr> <c-w>1_
 
-let g:wiki_viewer = {'pdf': 'zathura'}
+let g:wiki_viewer = {'pdf': 'okular'}
 
 " para abrir un split con el index
 autocmd FileType wiki nmap <leader>wsw :split<cr><leader>ww
 
+autocmd filetype wiki nmap <s-tab> <plug>(wiki-link-prev)
 
 " esto es una lista de diccionarios; cada diccionario tiene info de un template: "todos tienen que tener a matcher and a source". el único que tengo es template.wiki. el criterio que tiene que tener un filename para que se le aplique el template es no tener un whitespace. osea... todos.
 "let g:wiki_templates = [
@@ -391,7 +402,7 @@ endfunction
 let g:wiki_file_handler = 'WikiFileHandler'
 function! WikiFileHandler(...) abort dict
   if self.path =~# 'pdf$'
-    silent execute '!zathura' fnameescape(self.path) '&'
+    silent execute '!okular' fnameescape(self.path) '&'
     return 1
   endif
 
@@ -401,7 +412,7 @@ endfunction
 let g:netrw_browsex_viewer="-"
 " functions for file extension '.pdf'.
 function! NFH_pdf(f)
-	execute '!zathura' a:f
+	execute '!okular' a:f
 endfunction
 
 
@@ -416,8 +427,6 @@ endfunction
 let g:wiki_fzf_pages_opts = '--preview "cat {1}"'
 
 " }}}
-
-"luafile $HOME/.config/nvim/lua/plugins.lua
 
 " Vimtex{{{
 " let g:vimtex_compiler_latexmk_engines = {'pdflatex': '-pdf'}

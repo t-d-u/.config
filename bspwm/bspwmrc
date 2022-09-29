@@ -13,7 +13,9 @@ xsetroot -cursor_name left_ptr &
 $HOME/.config/polybar/launch.sh
 # /etc/polybar/launch.sh
 
-#bspc monitor -d I II III IV V VI VII VIII IX X
+#spotify &
+#wmctrl -r Spotify -t 7
+#bspc config external_rules_command "$HOME/.config/bspwm/scripts/spotify.sh"
 
 bspc config border_width         2
 bspc config window_gap         8
@@ -25,7 +27,7 @@ bspc config gapless_monocle      true
 bspc rule -a Matplotlib state=floating
 bspc rule -a Anki desktop='^5'
 bspc rule -a Zathura state=tiled
-bspc rule -a spotify desktop='^9'
+#bspc rule -a spotify desktop='^9' state=tiled
 
 
 xrandr --output eDP1 --scale 0.8x0.8

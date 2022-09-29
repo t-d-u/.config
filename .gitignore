@@ -21,6 +21,6 @@
 !leeme.txt
 
 # ignorame estos
-vifm/vifminfo.json
-vifm/vifminfo.json_79898
+**/vifm/vifminfo.json
+**/vifm/vifminfo.json_79898
 
