@@ -568,4 +568,6 @@ nmap A :!nvim %c:r.wiki<cr>
 
 nmap I :!nvim index.wiki<cr>
 
+command b :cd $biblio
+
 set sort=+name

@@ -23,7 +23,6 @@ Plug 'Raimondi/delimitMate' " auto-paréntesis
 "Plug 'godlygeek/tabular' " plugin para pandoc y csv no lo uso nunca
 Plug 'tpope/vim-surround' " surround no lo uso nunca
 Plug 'sirver/ultisnips' " better snippets (suscribe Tab)
-Plug 'lilydjwg/colorizer' " colors on files
 Plug 'lervag/vimtex' "vimtex
 Plug 'aserebryakov/vim-todo-lists'
 Plug 'dhruvasagar/vim-table-mode'
@@ -115,44 +114,23 @@ autocmd BufWritePost *Xresources,*Xdefaults !xrdb %
 "}}}
 
 "  general mappings{{{
-nnoremap <s-tab> gt
+nmap <leader>v :so $MYVIMRC<CR>
+" buffers {{{
 nmap ,l :bnext<cr>
 nmap ,h :bprevious<cr>
 nmap ,b :ls<CR>:b<Space>
 " del plugin bclose.vim
 nmap ,d <leader>bd
+" }}}
 
-nmap <leader>z f]F$yt\|:!okular <C-R>"<CR><CR>
+nmap <leader>a :above split<cr><c-j>
 
-" para yankear el filepath del file en el current buffer. usar :r es para tener solo el root. hice lo mismo con vifm; lo saque de ahi en realidad. es algo que agregue a lo que encontre aca: https://stackoverflow.com/questions/916875/yank-file-name-path-of-current-buffer-in-vim
+"inoremap <S-Tab> search('\%#[]>)}]', 'n') ? '<Right>' : '<Tab>'
 
-"noremap <silent> yf :let @+=expand("%:r")<CR>
-"noremap <silent> yf :let @+=expand("%:t")<CR>
-" @f yankea al register f
-
-inoremap <S-Tab> search('\%#[]>)}]', 'n') ? '<Right>' : '<Tab>'
-
-autocmd FileType wiki imap <S-tab> <esc>Ea<space>
-autocmd FileType wiki vmap <leader>¿ di¿<tab><esc>p3<right>
-
+" listar qué tiene cada register
 nnoremap <silent> "" :registers "0123456789abcdefghijklmnopqrstuvwxyz*+.<CR>
 
-noremap <silent> yF :let @f=expand("%:t")<CR>
-" para yankear un link al register l. la idea es tener el cursor en una sección que quiero linkear. ponele que estoy en una ###seccion3; quiero #seccion1#2#seccion3. xa eso voy a la table of contents, busco el link y vuelvo.
-"nmap yl 2F["ly$
-nmap yl T["lyt]
 
-"como buscar el link estando parado sobre la linea con el titulo del subheader.
-nmap yh $F#y$gg/<C-R>"<CR>
-
-"osea la idea es usar yh, luego yl, luego volver al lugar donde quería pegar el link
-
-
-autocmd FileType wiki vmap b :VBox<cr>
-
-autocmd FileType wiki nmap Bb :set ve=all<cr>
-
-nnoremap <silent> <leader>o :<C-u>call append(line("."),   repeat([""], v:count1))<CR>
 " }}}
 
 " CtrlSF usado con wiki.vim xa buscar texto dentro de file {{{
@@ -329,47 +307,57 @@ let g:ipython_cell_send_cell_headers = 1
 "}}}
 
 " wiki.vim {{{
-let g:wiki_root = '~/zettelkasten' "esto no sirve de nada
+let g:wiki_root = '~/zettelkasten' "esto no sirve de nada si no tengo un zettelkasten
 " si no agrego md no puedo abrir fotos en .md apretando enter
 let g:wiki_filetypes = ['wiki', 'md']
 let g:wiki_link_extension = '.wiki'
-
-
 let g:wiki_link_target_type = 'wiki'
 
-" esto es con <leader>wsl
-let g:wiki_tag_list = {'output' : 'echo'}
+" si usara tags...
+"let g:wiki_tag_list = {'output' : 'echo'}
+"nmap <leader>wft <plug>(wiki-fzf-tags)
 
-nmap \<cr> <plug>(wiki-link-follow-vsplit)
-" reemplazo <c-w>u por t<cr> para abrir link en new tab
-nmap t<cr> <plug>(wiki-link-follow-tab)
+" ya no me sirven de nada xq los nombres de las pages son fecha-clase.
+"nmap <leader>wfp <plug>(wiki-fzf-pages)
 
-"abrir una page (o file cualquiera) que esta linkeada en una nota cuyo buffer se esta viendo en una ventana A, en una ventana B: B es la ultima ventana que fue usada. fs es por file split. osea apretar enter te abre el link en la misma window, fs te la abre en la otra window
-nnoremap <silent> fs :let mycurf=expand("<cfile>")<cr><c-w>p:execute("e ".mycurf)<cr>
-nmap <leader>a :above split<cr><c-j>
-
-
-" esto lo quiero usar pero me dice que no tengo fzf
-nmap <leader>wfp <plug>(wiki-fzf-pages)
-nmap <leader>wft <plug>(wiki-fzf-tags)
-
-nmap tt <c-w><cr> <c-w>1_
-
-let g:wiki_viewer = {'pdf': 'okular'}
+" ya no sirve desde leader-z
+"let g:wiki_viewer = {'pdf': 'okular'}
 
 " para abrir un split con el index
-autocmd FileType wiki nmap <leader>wsw :split<cr><leader>ww
+"autocmd FileType wiki nmap <leader>wsw :split<cr><leader>ww
 
+" mappings {{{
 autocmd filetype wiki nmap <s-tab> <plug>(wiki-link-prev)
 
-" esto es una lista de diccionarios; cada diccionario tiene info de un template: "todos tienen que tener a matcher and a source". el único que tengo es template.wiki. el criterio que tiene que tener un filename para que se le aplique el template es no tener un whitespace. osea... todos.
-"let g:wiki_templates = [
-	  "\ { 'match_re': '\S',
-	  "\   'source_filename': '/home/tdu/zettelkasten/template.wiki'}
-	  "\]
-" lo comento xq no lo uso y xq no sé cómo hacer para que funcione solo con archivos .wiki; ahora hago cualquier .md anywhere y me pone el template.
+autocmd FileType wiki imap <S-tab> <esc>Ea<space>
+
+autocmd FileType wiki vmap <leader>¿ di¿<tab><esc>p3<right>
+
+autocmd filetype wiki nmap <leader>z f]F$yt\|:!okular <C-R>"\|st sw & <CR><CR>
+
+" yank filename al register f
+noremap <silent> yf :let @f=expand("%:t")<CR>
+
+" yank number of line
+noremap <silent> yn :let @n=line(".")<CR>
+" go to number of line
+noremap <silent> gn :<C-R>n<CR>
+
+" yank header de archivo .md o .wiki e ir a buscarlo en el TOC
+autocmd filetype wiki nmap yh $F#y$gg/<C-R>"<CR>
 
 
+" yank link al register l sin incluir [[]]
+autocmd filetype wiki nmap yl T["lyt]
+
+" VBox {{{
+autocmd FileType wiki vmap b :VBox<cr>
+autocmd FileType wiki nmap Bb :set ve=all<cr>
+nnoremap <silent> <leader>o :<C-u>call append(line("."),   repeat([""], v:count1))<CR>
+" }}}
+" }}}
+
+" create page{{{
 let g:wiki_map_create_page = 'MyFunction'
 
 function MyFunction(name) abort
@@ -381,51 +369,66 @@ function MyFunction(name) abort
         "\ : a:name . '_' . strftime('%Y%m%d%H%M%S')
         \ : strftime('%Y%m%d%H%M%S') . '_' . a:name
 endfunction
+" }}}
 
-
-
-" esto viene de una modicicación a este comment de god himself: https://github.com/lervag/wiki.vim/issues/240#issuecomment-1195354202
+"{{{text to link
+" esto viene de una modicicación que le hice a este comment de lervag: https://github.com/lervag/wiki.vim/issues/240#issuecomment-1195354202
 let g:wiki_map_text_to_link = 'MyTextToLink'
 
 function MyTextToLink(text) abort
   return [strftime('%Y%m%d%H%M%S') . '_' . a:text, a:text]
 endfunction
+" }}}
 
+" templates {{{
 
+" esto es una lista de diccionarios; cada diccionario tiene info de un template: "todos tienen que tener a matcher and a source". el único que tengo es template.wiki. el criterio que tiene que tener un filename para que se le aplique el template es no tener un whitespace. osea... todos.
+"let g:wiki_templates = [
+	  "\ { 'match_re': '\S',
+	  "\   'source_filename': '/home/tdu/zettelkasten/template.wiki'}
+	  "\]
+" lo comento xq no lo uso y xq no sé cómo hacer para que funcione solo con archivos .wiki; ahora hago cualquier .md anywhere y me pone el template.
+"}}}
 
-"recordar que tengo un unltisnips
+" para pdfs, lo de netrw me lo paso agus. desde el <leader>z ya no lo uso{{{
+"let g:wiki_file_handler = 'WikiFileHandler'
+"function! WikiFileHandler(...) abort dict
+  "if self.path =~# 'pdf$'
+    "silent execute '!okular' fnameescape(self.path) '&'
+    "return 1
+  "endif
 
+  "return 0
+"endfunction
+"""""""""""""""""""""""
+"let g:netrw_browsex_viewer="-"
+"" functions for file extension '.pdf'.
+"function! NFH_pdf(f)
+	"execute '!okular' a:f
+"endfunction
 
-" dado que cuando tomo apuntes tengo el index de la materia cuyos apuntes estoy tomando en un split, y quiero ir listando las pages que voy creando (mas que nada porque es dificil ir linkeandolas en el momento, y esta bueno tener la secuencia de como se fueron creando), uso el mapping de yf que tengo en general mappings para yankear el rootname, y en vez de pegar, voy a pegar y hacer enter en el index. no tengo un mapping, es p enter, pero me estoy recordando.
-
-" para pdfs, lo de netrw me lo paso agus{{{
-let g:wiki_file_handler = 'WikiFileHandler'
-function! WikiFileHandler(...) abort dict
-  if self.path =~# 'pdf$'
-    silent execute '!okular' fnameescape(self.path) '&'
-    return 1
-  endif
-
-  return 0
-endfunction
-""""""""""""""""""""""
-let g:netrw_browsex_viewer="-"
-" functions for file extension '.pdf'.
-function! NFH_pdf(f)
-	execute '!okular' a:f
-endfunction
-
-
-" situación: quiero tener un zettelkasten del cual estudiar para un parcial de una materia específica, pero no quiero una wiki para esa materia únicamente, dado que haciendo pages de nam voy a querer linkear a pages que estarán ya en mi zet general. el tema es que desde esa page de zet general seguramente linkeo a cosas que ya se van de lo dictado en la materia; yo quiero estudiar solo lo que me estén tomando; meterme solo en links de la materia. entonces quiero, cuando pongo el cursor en un link, que me diga los tags que tiene. así sé si seguir metiéndome o no.
-
-" otra situación: decidí que quiero tener más de un zettelkasten. lo siento pero si estoy leyendo un paper quiero relacionar los temas del paper primero.
-
+" ni idea qué era esto
+"let g:wiki_fzf_pages_opts = '--preview "cat {1}"'
 
 " }}}
 
-
-let g:wiki_fzf_pages_opts = '--preview "cat {1}"'
-
+" omnicomplete {{{
+"esto es copiado de wiki.vim. es para usar omnicomplete de links luego de [[. lo que tiene es que te hace omnicomplete desde el working dir hacia abajo, pero no viceversa hasta el index.wiki. entonces la unica ventjaa que tiene respecto de ncm2-path es lo primero que hace, dado que ncm2 solo se fija en el wd.
+augroup my_cm_setup
+autocmd!
+autocmd BufEnter * call ncm2#enable_for_buffer()
+autocmd User WikiBufferInitialized call ncm2#register_source({
+		\ 'name': 'wiki',
+		\ 'priority': 9,
+		\ 'scope': ['wiki'],
+		\ 'word_pattern': '\w+',
+		\ 'complete_pattern': '\[\[',
+		\ 'on_complete': ['ncm2#on_complete#delay', 200,
+		\                 'ncm2#on_complete#omni',
+		\                 'wiki#complete#omnicomplete'],
+		\})
+augroup END
+" }}}
 " }}}
 
 " Vimtex{{{
@@ -476,22 +479,4 @@ let g:vim_markdown_math = 1
 "algo que le gusta a lervag
 let g:vim_markdown_conceal = 2
 
-
-
-
-"esto es copiado de wiki.vim. es para usar omnicomplete de links luego de [[. lo que tiene es que te hace omnicomplete desde el working dir hacia abajo, pero no viceversa hasta el index.wiki. entonces la unica ventjaa que tiene respecto de ncm2-path es lo primero que hace, dado que ncm2 solo se fija en el wd.
-augroup my_cm_setup
-autocmd!
-autocmd BufEnter * call ncm2#enable_for_buffer()
-autocmd User WikiBufferInitialized call ncm2#register_source({
-		\ 'name': 'wiki',
-		\ 'priority': 9,
-		\ 'scope': ['wiki'],
-		\ 'word_pattern': '\w+',
-		\ 'complete_pattern': '\[\[',
-		\ 'on_complete': ['ncm2#on_complete#delay', 200,
-		\                 'ncm2#on_complete#omni',
-		\                 'wiki#complete#omnicomplete'],
-		\})
-augroup END
 

@@ -1,9 +1,9 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 #
-export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/scripts/misc:$HOME/.config/vifm/scripts:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$HOME/code/scripts/misc:$HOME/.config/vifm/scripts:$PATH
 #export PYTHONPATH=$HOME/Documents/scripts/pyfx/ml:$PYTHONPATH esto tenia en la compu vieja
-export PYTHONPATH=$PYTHONPATH:$HOME/scripts/pyfx/misc:$HOME/scripts/misc
+export PYTHONPATH=$PYTHONPATH:$HOME/code/scripts/pyfx/misc:$HOME/scripts/misc
 source $ZDOTDIR/.zalias
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -15,8 +15,8 @@ export MPLCONFIGDIR=$HOME/.config/matplotlib/
 #export external_drive='/media/tdu/Elements/'
 export external_drive='/media/tdu/9C1B-4C75/'
 export usbandroid="/run/user/1000/gvfs/mtp:host=Xiaomi_TRINKET-IDP__SN%3A95D39118_1015d472"
-export biblio=$HOME/pdfs/science/biblio/
-export papers=$HOME/pdfs/science/papers/
+export biblio=$HOME/pdfs/science/biblio
+export papers=$HOME/pdfs/science/papers
 export maths=$HOME/zettelkasten/latex_formulas/
 export dnl=$HOME/FCEyN/2020-21/dnl/
 export z=$HOME/zettelkasten/
