@@ -1,13 +1,13 @@
 #
 # wm independent hotkeys
 #
-
+#
 # terminal emulator
 super + Return
 	st
 # browser
 super + b
-	firefox -no-remote
+	firefox
 super + shift + space
 	dmenu_run
 

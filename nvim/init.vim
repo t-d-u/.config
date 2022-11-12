@@ -140,6 +140,7 @@ nmap <leader>fS :CtrlSFToggle<CR>
 function! g:CtrlSFAfterMainWindowInit()
     setl wrap
 endfunction
+nmap <leader>ff :CtrlSFToggle<CR>
 ""}}}
 
 "ultisnips{{{
@@ -333,7 +334,8 @@ autocmd FileType wiki imap <S-tab> <esc>Ea<space>
 
 autocmd FileType wiki vmap <leader>¿ di¿<tab><esc>p3<right>
 
-autocmd filetype wiki nmap <leader>z f]F$yt\|:!okular <C-R>"\|st sw & <CR><CR>
+"autocmd filetype wiki nmap <leader>z f]F$yt\|:!okular <C-R>"\|st sw & <CR><CR>
+autocmd filetype wiki nmap <leader>z f]F[lyt\|:!okular <C-R>"\|st sw & <CR><CR>
 
 " yank filename al register f
 noremap <silent> yf :let @f=expand("%:t")<CR>
@@ -402,12 +404,13 @@ endfunction
 "endfunction
 """""""""""""""""""""""
 "let g:netrw_browsex_viewer="-"
-"" functions for file extension '.pdf'.
-"function! NFH_pdf(f)
-	"execute '!okular' a:f
+"" functions for file extension '.mp3'.
+"function! NFH_mp3(f)
+	""execute '!sw vlc a:f \| st sw &'
+	"normal "ayi]
+	"execute '!vlc <C-R>a\|st sw & <CR> <CR>'
 "endfunction
 
-" ni idea qué era esto
 "let g:wiki_fzf_pages_opts = '--preview "cat {1}"'
 
 " }}}
